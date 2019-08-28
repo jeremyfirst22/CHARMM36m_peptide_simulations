@@ -1,0 +1,16 @@
+integrator               = steep
+define                  = -DPOSSULRES
+
+nsteps                   = 10000
+
+emtol                    = 1
+emstep                   = 0.01
+
+; Neighbor searching
+cutoff-scheme            = group 
+;nstlist                  = 0
+pbc                      = no
+periodic-molecules       = no
+
+
+

@@ -1,0 +1,65 @@
+; 7.3.3 Run Control
+define                  = -DPOSLIGRES
+
+integrator              = md                    ; md integrator
+tinit                   = 0                     ; [ps] starting time for run
+dt                      = 0.002                 ; [ps] time step for integration
+nsteps                  = 250000                 ; maximum number of steps to integrate, 0.002 * 25,000 = 50 ps
+comm_mode               = Linear                ; remove center of mass translation
+nstcomm                 = 1                     ; [steps] frequency of mass motion removal
+comm_grps               = System                ; group(s) for center of mass motion removal
+
+; 7.3.8 Output Control
+nstxout                 = 25000         ; [steps] freq to write coordinates to trajectory
+nstvout                 = 25000         ; [steps] freq to write velocities to trajectory
+nstfout                 = 25000         ; [steps] freq to write forces to trajectory
+nstlog                  = 100           ; [steps] freq to write energies to log file
+nstenergy               = 100           ; [steps] freq to write energies to energy file
+nstxout-compressed      = 100           ; [steps] freq to write coordinates to xtc trajectory
+compressed-x-precision  = 1000          ; [real] precision to write xtc trajectory
+compressed-x-grps       = System        ; group(s) to write to xtc trajectory
+energygrps              = System        ; group(s) to write to energy file
+
+; 7.3.9 Neighbor Searching
+nstlist                 = 1             ; [steps] freq to update neighbor list
+ns_type                 = grid          ; method of updating neighbor list
+pbc                     = xyz           ; periodic boundary conditions in all directions
+rlist                   = 1.0           ; [nm] cut-off distance for the short-range neighbor list ; 1.0 nm for oplsaa
+cutoff-scheme           = group 
+
+; 7.3.10 Electrostatics
+coulombtype             = PME           ; Particle-Mesh Ewald electrostatics
+rcoulomb                = 1.0           ; [nm] distance for Coulomb cut-off ; 1.0 nm for oplsaa
+
+; 7.3.11 VdW
+vdwtype                 = cut-off       ; twin-range cut-off with rlist where rvdw >= rlist
+rvdw                    = 1.0           ; [nm] distance for LJ cut-off
+DispCorr                = EnerPres      ; apply long range dispersion corrections
+
+; 7.3.13 Ewald
+fourierspacing          = 0.12          ; [nm] grid spacing for FFT grid when using PME
+pme_order               = 4             ; interpolation order for PME, 4 = cubic
+ewald_rtol              = 1e-5          ; relative strength of Ewald-shifted potential at rcoulomb
+
+; 7.3.14 Temperature Coupling
+tcoupl                  = berendsen                     ; temperature coupling with Berendsen-thermostat
+tc_grps                 = Protein    Non-Protein        ; groups to couple seperately to temperature bath
+tau_t                   = 0.1        0.1                ; [ps] time constant for coupling
+ref_t                   = 300        300                ; [K] reference temperature for coupling
+
+; 7.3.16 Simulated Annealing
+annealing               = single   single ; Type of annealing for each temperature group 
+annealing-npoints        = 51        51  ; Number of time points to use for specifying annealing in each group
+annealing-time          = 0 10 20 30 40 50 60 70 80 90 100 110 120 130 140 150 160 170 180 190 200 210 220 230 240 250 260 270 280 290 300 310 320 330 340 350 360 370 380 390 400 410 420 430 440 450 460 470 480 490 500 0 10 20 30 40 50 60 70 80 90 100 110 120 130 140 150 160 170 180 190 200 210 220 230 240 250 260 270 280 290 300 310 320 330 340 350 360 370 380 390 400 410 420 430 440 450 460 470 480 490 500 
+annealing-temp          = 300 312 324 336 348 360 372 384 396 408 420 432 444 456 468 480 492 504 516 528 540 552 564 576 588 600 612 624 636 648 660 672 684 696 708 720 732 744 756 768 780 792 804 816 828 840 852 864 876 888 900 300 312 324 336 348 360 372 384 396 408 420 432 444 456 468 480 492 504 516 528 540 552 564 576 588 600 612 624 636 648 660 672 684 696 708 720 732 744 756 768 780 792 804 816 828 840 852 864 876 888 900 ; 12 K every 10 ps
+
+; 7.3.17 Velocity Generation
+gen_vel                 = no            ; generate velocities according to Maxwell distribution of temperature
+
+; 7.3.18 Bonds
+constraints             = all-bonds     ; convert all bonds to constraints
+constraint_algorithm    = LINCS         ; LINear Constraint Solver
+continuation            = no            ; no = apply constraints to the start configuration
+lincs_order             = 4             ; highest order in the expansion of the contraint coupling matrix
+lincs_iter              = 1             ; number of iterations to correct for rotational lengthening
+lincs_warnangle         = 30            ; [degrees] maximum angle that a bond can rotate before LINCS will complain

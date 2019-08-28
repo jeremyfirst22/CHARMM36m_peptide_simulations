@@ -1,0 +1,33 @@
+integrator          = md
+
+tinit               = 0
+dt                  = 0.001
+nsteps              = 50000000
+comm-mode           = Angular
+
+
+nstxout             = 100
+nstvout             = 100
+nstlog              = 100
+nstcalcenergy       = 100
+nstenergy           = 100
+energygrps          = System
+
+
+
+cutoff-scheme       = group
+nstlist             = 0
+ns-type             = simple
+
+pbc                 = no
+periodic-molecules  = no
+
+
+gen-vel             = yes
+gen-temp            = 300
+
+
+constraints         = h-bonds
+constraint-algorithm   = SHAKE
+continuation          = no
+

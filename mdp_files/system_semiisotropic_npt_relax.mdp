@@ -1,0 +1,62 @@
+; Back-bone position restraints
+define                = -DPOSRES -DPOSSULRES
+
+; Run control
+integrator            = md 
+tinit                 = 0
+dt                    = 0.002 
+nsteps                = 50000
+comm-mode             = Linear
+comm-grps             = System 
+
+; 7.3.8 Output Control
+nstxout                 = 25000         ; [steps] freq to write coordinates to trajectory
+nstvout                 = 25000         ; [steps] freq to write velocities to trajectory
+nstfout                 = 25000         ; [steps] freq to write forces to trajectory
+nstlog                  = 100           ; [steps] freq to write energies to log file
+nstenergy               = 100           ; [steps] freq to write energies to energy file
+nstxout-compressed      = 100           ; [steps] freq to write coordinates to xtc trajectory
+compressed-x-precision  = 1000          ; [real] precision to write xtc trajectory
+compressed-x-grps       = System        ; group(s) to write to xtc trajectory
+energygrps              = System        ; group(s) to write to energy file
+
+; Neighbor searching
+cutoff-scheme         = group
+nstlist               = 1
+ns-type               = grid
+pbc                   = xyz 
+rlist                 = 1.0
+
+; Electrostatics
+coulombtype           = PME
+rcoulomb              = 1.0
+
+; Van der Wall treatment
+vdwtype               = cut-off
+rvdw                  = 1.0
+DispCorr              = EnerPres
+
+; Thermostat and temp-coupling
+tcoupl                = nose-hoover
+tc-grps               = Protein   Non-Protein
+tau-t                 = 0.1       0.1 
+ref-t                 = 300       300 
+
+; Pressure control 
+pcoupl                = parrinello-rahman
+pcoupltype            = semiisotropic
+tau-p                 = 2.0
+compressibility       = 0   4.5e-5 ;; xy, z. xy=0, so the xy dimensions match SAM
+ref-p                 = 1.0 1.0    ;; xy, z
+refcoord-scaling      = com
+
+; Initial velocity generation 
+gen_vel               = no
+
+; Restraint algorithms on bonds 
+constraints           = h-bonds
+constraint-algorithm  = LINCS  
+continuation          = yes
+
+
+
